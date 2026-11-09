@@ -15,7 +15,7 @@ const initialNotes = [
 ]
 
 function Notes() {
-    const [notes] = useState(initialNotes)
+    const [notes, setNotes] = useState(initialNotes)
     const [form, setForm] = useState({
         title: '',
         body: ''
@@ -28,6 +28,36 @@ function Notes() {
             ...currentForm,
             [name]: value
         }))
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault()
+
+        const title = form.title.trim()
+        const body = form.body.trim()
+
+        if (!title || !body) return
+
+        setNotes((currentNotes) => [
+            ...currentNotes,
+            {
+                id: Date.now(),
+                title,
+                body
+            }
+        ])
+
+        setForm({
+            title: '',
+            body: ''
+        })
+    }
+
+    function handleTitleKeyDown(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault()
+            handleSubmit(event)
+        }
     }
 
     return (
@@ -45,12 +75,13 @@ function Notes() {
                     />
                 </div>
 
-                <form className="grid gap-3">
+                <form className="grid gap-3" onSubmit={handleSubmit}>
                     <p className="text-[13px] font-normal tracking-wide text-[#949494]">NEW NOTE</p>
                     <input
                         name="title"
                         value={form.title}
                         onChange={handleInputChange}
+                        onKeyDown={handleTitleKeyDown}
                         placeholder="Title"
                         className="h-[52px] w-full border border-[#e6e6e6] px-4 text-lg outline-none placeholder:text-black/40 placeholder:italic focus:border-[#cf7d7d]"
                     />
