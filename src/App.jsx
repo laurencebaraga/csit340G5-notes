@@ -4,10 +4,12 @@ import Notes from './components/Notes.jsx'
 import Info from './components/Info.jsx'
  
 function App() {
-  const [largeText, setLargeText] = useState(() => localStorage.getItem('largeText') === 'true')
+  const [largeText, setLargeText] = useState(() =>
+    JSON.parse(localStorage.getItem('largeText') ?? 'false')
+  )
 
   useEffect(() => {
-    localStorage.setItem('largeText', String(largeText))
+    localStorage.setItem('largeText', JSON.stringify(largeText))
   }, [largeText])
 
   return (
